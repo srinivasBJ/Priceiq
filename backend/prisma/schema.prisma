@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users             User[]
+  products          Product[]
+  rules             PricingRule[]
+  competitors       CompetitorProduct[]
+  alerts            Alert[]
+  optimizationRuns  OptimizationRun[]
+  analyticsSnapshots AnalyticsSnapshot[]
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  password       String
+  name           String
+  role           Role     @default(MEMBER)
+  organizationId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  name           String
+  sku            String
+  currentPrice   Float
+  minPrice       Float
+  maxPrice       Float
+  costPrice      Float
+  organizationId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization  @relation(fields: [organizationId], references: [id])
+  priceHistory PriceHistory[]
+  competitors  CompetitorProduct[]
+}
+
+model PriceHistory {
+  id        String   @id @default(cuid())
+  productId String
+  price     Float
+  reason    String?
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model PricingRule {
+  id             String   @id @default(cuid())
+  name           String
+  description    String?
+  condition      Json
+  action         Json
+  priority       Int      @default(0)
+  isActive       Boolean  @default(true)
+  organizationId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+}
+
+model CompetitorProduct {
+  id             String   @id @default(cuid())
+  productId      String
+  organizationId String
+  competitorName String
+  competitorUrl  String
+  price          Float
+  lastScrapedAt  DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  product      Product      @relation(fields: [productId], references: [id])
+  organization Organization @relation(fields: [organizationId], references: [id])
+}
+
+model Alert {
+  id             String      @id @default(cuid())
+  type           String
+  message        String
+  isResolved     Boolean     @default(false)
+  organizationId String
+  createdAt      DateTime    @default(now())
+  resolvedAt     DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+}
+
+model OptimizationRun {
+  id             String   @id @default(cuid())
+  status         String
+  productsCount  Int
+  organizationId String
+  createdAt      DateTime @default(now())
+  completedAt    DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+}
+
+model AnalyticsSnapshot {
+  id             String   @id @default(cuid())
+  date           DateTime
+  revenue        Float
+  margin         Float
+  organizationId String
+  createdAt      DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id])
+}

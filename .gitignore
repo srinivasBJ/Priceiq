@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+backend/.env
+.prisma/
+coverage/
+*.log
+.DS_Store
+package-lock 2.json
+node_modules/.bin 2/
