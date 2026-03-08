@@ -1,10 +1,17 @@
 node_modules/
 dist/
-.env
-backend/.env
-.prisma/
 coverage/
+.prisma/
 *.log
 .DS_Store
-package-lock 2.json
-node_modules/.bin 2/
+
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+.env.local
+.env.production
+.env.development
+
+.cursor
