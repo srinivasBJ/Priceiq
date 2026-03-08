@@ -1,207 +1,173 @@
-import { useState, useEffect } from "react"
-import { useNavigate, useSearchParams } from "react-router-dom"
-
-const devices = [
-  { name: "Samsung Galaxy S26 Ultra", brand: "Samsung", category: "Smartphone", priceIN: "INR 1,39,999", priceUS: "USD 1,299", amazonIN: "INR 1,38,999", amazonUS: "USD 1,279", year: "2026", score: 92, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.9in LTPO AMOLED 120Hz 2600nits"],["Processor","Snapdragon 8 Elite Gen 5"],["RAM","12GB / 16GB"],["Storage","256GB / 512GB / 1TB"],["Camera","200MP + 50MP + 50MP"],["Battery","5000mAh 60W wired 25W wireless"],["OS","Android 16 One UI 8"]] },
-  { name: "Samsung Galaxy S25 Ultra", brand: "Samsung", category: "Smartphone", priceIN: "INR 1,29,999", priceUS: "USD 1,199", amazonIN: "INR 1,26,999", amazonUS: "USD 1,179", year: "2025", score: 90, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.9in LTPO AMOLED 120Hz"],["Processor","Snapdragon 8 Elite"],["RAM","12GB"],["Storage","256GB / 512GB / 1TB"],["Camera","200MP + 50MP + 10MP + 50MP"],["Battery","5000mAh 45W wired"],["OS","Android 15 One UI 7"]] },
-  { name: "Samsung Galaxy S25+", brand: "Samsung", category: "Smartphone", priceIN: "INR 99,999", priceUS: "USD 999", amazonIN: "INR 96,999", amazonUS: "USD 979", year: "2025", score: 86, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.7in LTPO AMOLED 120Hz"],["Processor","Snapdragon 8 Elite"],["RAM","12GB"],["Storage","256GB / 512GB"],["Camera","50MP + 10MP + 12MP"],["Battery","4900mAh 45W wired"],["OS","Android 15 One UI 7"]] },
-  { name: "Samsung Galaxy S25", brand: "Samsung", category: "Smartphone", priceIN: "INR 79,999", priceUS: "USD 799", amazonIN: "INR 77,999", amazonUS: "USD 779", year: "2025", score: 84, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.2in LTPO AMOLED 120Hz"],["Processor","Snapdragon 8 Elite"],["RAM","12GB"],["Storage","128GB / 256GB"],["Camera","50MP + 10MP + 12MP"],["Battery","4000mAh 25W wired"],["OS","Android 15 One UI 7"]] },
-  { name: "Samsung Galaxy A56", brand: "Samsung", category: "Smartphone", priceIN: "INR 34,999", priceUS: "USD 399", amazonIN: "INR 33,999", amazonUS: "USD 389", year: "2025", score: 74, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.7in AMOLED 120Hz"],["Processor","Exynos 1580"],["RAM","8GB / 12GB"],["Storage","128GB / 256GB"],["Camera","50MP + 12MP + 5MP"],["Battery","5000mAh 45W wired"],["OS","Android 15 One UI 7"]] },
-  { name: "iPhone 16 Pro Max", brand: "Apple", category: "Smartphone", priceIN: "INR 1,59,900", priceUS: "USD 1,199", amazonIN: "INR 1,57,000", amazonUS: "USD 1,189", year: "2024", score: 95, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.9in Super Retina XDR 120Hz 2000nits"],["Processor","Apple A18 Pro"],["RAM","8GB"],["Storage","256GB / 512GB / 1TB"],["Camera","48MP + 48MP + 12MP"],["Battery","4685mAh 27W wired 25W MagSafe"],["OS","iOS 18"]] },
-  { name: "iPhone 16 Pro", brand: "Apple", category: "Smartphone", priceIN: "INR 1,19,900", priceUS: "USD 999", amazonIN: "INR 1,17,000", amazonUS: "USD 979", year: "2024", score: 91, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.3in Super Retina XDR 120Hz"],["Processor","Apple A18 Pro"],["RAM","8GB"],["Storage","128GB / 256GB / 512GB / 1TB"],["Camera","48MP + 48MP + 12MP"],["Battery","3582mAh 27W wired"],["OS","iOS 18"]] },
-  { name: "iPhone 16 Plus", brand: "Apple", category: "Smartphone", priceIN: "INR 89,900", priceUS: "USD 899", amazonIN: "INR 87,000", amazonUS: "USD 879", year: "2024", score: 85, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.7in Super Retina XDR 60Hz"],["Processor","Apple A18"],["RAM","8GB"],["Storage","128GB / 256GB / 512GB"],["Camera","48MP + 12MP"],["Battery","4674mAh 25W wired"],["OS","iOS 18"]] },
-  { name: "iPhone 16", brand: "Apple", category: "Smartphone", priceIN: "INR 79,900", priceUS: "USD 799", amazonIN: "INR 77,900", amazonUS: "USD 779", year: "2024", score: 83, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.1in Super Retina XDR 60Hz"],["Processor","Apple A18"],["RAM","8GB"],["Storage","128GB / 256GB / 512GB"],["Camera","48MP + 12MP"],["Battery","3561mAh 25W wired"],["OS","iOS 18"]] },
-  { name: "iPhone 15 Pro Max", brand: "Apple", category: "Smartphone", priceIN: "INR 1,19,900", priceUS: "USD 1,099", amazonIN: "INR 1,09,000", amazonUS: "USD 999", year: "2023", score: 89, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.7in Super Retina XDR 120Hz"],["Processor","Apple A17 Pro"],["RAM","8GB"],["Storage","256GB / 512GB / 1TB"],["Camera","48MP + 12MP + 12MP"],["Battery","4422mAh 27W wired"],["OS","iOS 17"]] },
-  { name: "Google Pixel 9 Pro XL", brand: "Google", category: "Smartphone", priceIN: "INR 1,29,999", priceUS: "USD 1,099", amazonIN: "INR 1,26,999", amazonUS: "USD 1,069", year: "2024", score: 89, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.8in LTPO OLED 120Hz"],["Processor","Google Tensor G4"],["RAM","16GB"],["Storage","128GB / 256GB / 1TB"],["Camera","50MP + 48MP + 48MP"],["Battery","5060mAh 37W wired"],["OS","Android 15"]] },
-  { name: "Google Pixel 9 Pro", brand: "Google", category: "Smartphone", priceIN: "INR 1,09,999", priceUS: "USD 999", amazonIN: "INR 1,07,999", amazonUS: "USD 979", year: "2024", score: 88, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.3in LTPO OLED 120Hz 3000nits"],["Processor","Google Tensor G4"],["RAM","16GB"],["Storage","128GB / 256GB / 1TB"],["Camera","50MP + 48MP + 48MP"],["Battery","4700mAh 37W wired 23W wireless"],["OS","Android 15"]] },
-  { name: "Google Pixel 9", brand: "Google", category: "Smartphone", priceIN: "INR 79,999", priceUS: "USD 799", amazonIN: "INR 77,999", amazonUS: "USD 779", year: "2024", score: 83, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.3in OLED 120Hz"],["Processor","Google Tensor G4"],["RAM","12GB"],["Storage","128GB / 256GB"],["Camera","50MP + 48MP"],["Battery","4700mAh 27W wired"],["OS","Android 15"]] },
-  { name: "Google Pixel 9a", brand: "Google", category: "Smartphone", priceIN: "INR 49,999", priceUS: "USD 499", amazonIN: "INR 48,999", amazonUS: "USD 489", year: "2025", score: 79, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.3in OLED 120Hz"],["Processor","Google Tensor G4"],["RAM","8GB"],["Storage","128GB / 256GB"],["Camera","48MP + 13MP"],["Battery","5100mAh 23W wired"],["OS","Android 15"]] },
-  { name: "OnePlus 13", brand: "OnePlus", category: "Smartphone", priceIN: "INR 69,999", priceUS: "USD 799", amazonIN: "INR 67,999", amazonUS: "USD 789", year: "2025", score: 85, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.82in LTPO AMOLED 120Hz 4500nits"],["Processor","Snapdragon 8 Elite"],["RAM","12GB / 16GB / 24GB"],["Storage","256GB / 512GB"],["Camera","50MP + 50MP + 50MP"],["Battery","6000mAh 100W wired 50W wireless"],["OS","Android 15 OxygenOS 15"]] },
-  { name: "OnePlus 13R", brand: "OnePlus", category: "Smartphone", priceIN: "INR 42,999", priceUS: "USD 499", amazonIN: "INR 41,999", amazonUS: "USD 489", year: "2025", score: 78, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.78in AMOLED 120Hz"],["Processor","Snapdragon 8 Gen 3"],["RAM","8GB / 16GB"],["Storage","128GB / 256GB"],["Camera","50MP + 8MP + 2MP"],["Battery","6000mAh 80W wired"],["OS","Android 15 OxygenOS 15"]] },
-  { name: "OnePlus Nord 4", brand: "OnePlus", category: "Smartphone", priceIN: "INR 29,999", priceUS: "USD 349", amazonIN: "INR 28,999", amazonUS: "USD 339", year: "2024", score: 72, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.74in AMOLED 120Hz"],["Processor","Snapdragon 7+ Gen 3"],["RAM","8GB / 12GB"],["Storage","256GB / 512GB"],["Camera","50MP + 8MP"],["Battery","5500mAh 100W wired"],["OS","Android 14 OxygenOS 14"]] },
-  { name: "Xiaomi 15", brand: "Xiaomi", category: "Smartphone", priceIN: "INR 89,999", priceUS: "USD 799", amazonIN: "INR 87,999", amazonUS: "USD 779", year: "2025", score: 87, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.36in OLED 120Hz 3200nits"],["Processor","Snapdragon 8 Elite"],["RAM","12GB / 16GB"],["Storage","256GB / 512GB"],["Camera","50MP Leica + 50MP + 50MP"],["Battery","5240mAh 90W wired 50W wireless"],["OS","Android 15 HyperOS 2"]] },
-  { name: "Xiaomi 14 Ultra", brand: "Xiaomi", category: "Smartphone", priceIN: "INR 99,999", priceUS: "USD 899", amazonIN: "INR 97,999", amazonUS: "USD 879", year: "2024", score: 86, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.73in LTPO AMOLED 120Hz 3000nits"],["Processor","Snapdragon 8 Gen 3"],["RAM","12GB / 16GB"],["Storage","256GB / 512GB / 1TB"],["Camera","50MP Leica + 50MP + 50MP + 50MP"],["Battery","5000mAh 90W wired 80W wireless"],["OS","Android 14 HyperOS"]] },
-  { name: "Redmi Note 14 Pro+", brand: "Xiaomi", category: "Smartphone", priceIN: "INR 29,999", priceUS: "USD 299", amazonIN: "INR 28,999", amazonUS: "USD 289", year: "2024", score: 73, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.67in AMOLED 120Hz"],["Processor","Snapdragon 7s Gen 3"],["RAM","8GB / 12GB"],["Storage","128GB / 256GB"],["Camera","200MP + 8MP + 2MP"],["Battery","5110mAh 45W wired"],["OS","Android 14 HyperOS"]] },
-  { name: "Nothing Phone 3", brand: "Nothing", category: "Smartphone", priceIN: "INR 59,999", priceUS: "USD 649", amazonIN: "INR 57,999", amazonUS: "USD 629", year: "2025", score: 80, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.67in AMOLED 120Hz"],["Processor","Snapdragon 8s Gen 3"],["RAM","8GB / 12GB"],["Storage","128GB / 256GB"],["Camera","50MP + 50MP"],["Battery","4700mAh 65W wired"],["OS","Android 15 Nothing OS 3"]] },
-  { name: "Nothing Phone 2a Plus", brand: "Nothing", category: "Smartphone", priceIN: "INR 24,999", priceUS: "USD 299", amazonIN: "INR 23,999", amazonUS: "USD 289", year: "2024", score: 70, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.7in AMOLED 120Hz"],["Processor","Dimensity 7350 Pro"],["RAM","8GB / 12GB"],["Storage","128GB / 256GB"],["Camera","50MP + 50MP"],["Battery","5000mAh 45W wired"],["OS","Android 14 Nothing OS 2.6"]] },
-  { name: "Sony Xperia 1 VI", brand: "Sony", category: "Smartphone", priceIN: "INR 1,29,990", priceUS: "USD 1,299", amazonIN: "INR 1,24,999", amazonUS: "USD 1,249", year: "2024", score: 82, specs: [["Network","GSM / HSPA / LTE / 5G"],["Display","6.5in OLED 120Hz 1080x2340"],["Processor","Snapdragon 8 Gen 3"],["RAM","12GB"],["Storage","256GB / 512GB"],["Camera","52MP Zeiss + 12MP + 50MP"],["Battery","5000mAh 30W wired"],["OS","Android 14"]] },
-  { name: "iPad Pro M4 13-inch", brand: "Apple", category: "Tablet", priceIN: "INR 1,69,900", priceUS: "USD 1,299", amazonIN: "INR 1,65,000", amazonUS: "USD 1,279", year: "2024", score: 96, specs: [["Network","Wi-Fi 6E optional 5G"],["Display","13in Ultra Retina XDR OLED 120Hz"],["Processor","Apple M4 10-core"],["RAM","16GB"],["Storage","256GB / 512GB / 1TB / 2TB"],["Camera","12MP ultrawide + LiDAR"],["Battery","40.88Wh up to 10 hours"],["OS","iPadOS 17"]] },
-  { name: "iPad Pro M4 11-inch", brand: "Apple", category: "Tablet", priceIN: "INR 99,900", priceUS: "USD 999", amazonIN: "INR 97,000", amazonUS: "USD 979", year: "2024", score: 94, specs: [["Network","Wi-Fi 6E optional 5G"],["Display","11in Ultra Retina XDR OLED 120Hz"],["Processor","Apple M4 10-core"],["RAM","8GB / 16GB"],["Storage","256GB / 512GB / 1TB / 2TB"],["Camera","12MP ultrawide + LiDAR"],["Battery","31.29Wh up to 10 hours"],["OS","iPadOS 17"]] },
-  { name: "iPad Air M2 13-inch", brand: "Apple", category: "Tablet", priceIN: "INR 99,900", priceUS: "USD 799", amazonIN: "INR 96,999", amazonUS: "USD 779", year: "2024", score: 88, specs: [["Network","Wi-Fi 6E optional 5G"],["Display","13in Liquid Retina 60Hz"],["Processor","Apple M2 8-core"],["RAM","8GB"],["Storage","128GB / 256GB / 512GB / 1TB"],["Camera","12MP"],["Battery","36.59Wh up to 10 hours"],["OS","iPadOS 17"]] },
-  { name: "iPad Air M2 11-inch", brand: "Apple", category: "Tablet", priceIN: "INR 69,900", priceUS: "USD 599", amazonIN: "INR 67,999", amazonUS: "USD 579", year: "2024", score: 86, specs: [["Network","Wi-Fi 6E optional 5G"],["Display","11in Liquid Retina 60Hz"],["Processor","Apple M2 8-core"],["RAM","8GB"],["Storage","128GB / 256GB / 512GB / 1TB"],["Camera","12MP"],["Battery","28.93Wh up to 10 hours"],["OS","iPadOS 17"]] },
-  { name: "iPad 10th Gen", brand: "Apple", category: "Tablet", priceIN: "INR 44,900", priceUS: "USD 349", amazonIN: "INR 42,999", amazonUS: "USD 339", year: "2022", score: 78, specs: [["Network","Wi-Fi 6 optional 5G"],["Display","10.9in Liquid Retina 60Hz"],["Processor","Apple A14 Bionic"],["RAM","4GB"],["Storage","64GB / 256GB"],["Camera","12MP ultrawide"],["Battery","28.65Wh up to 10 hours"],["OS","iPadOS 16"]] },
-  { name: "Samsung Galaxy Tab S10 Ultra", brand: "Samsung", category: "Tablet", priceIN: "INR 1,18,999", priceUS: "USD 1,099", amazonIN: "INR 1,15,999", amazonUS: "USD 1,069", year: "2024", score: 87, specs: [["Network","Wi-Fi 7 optional 5G"],["Display","14.6in AMOLED 120Hz 2960x1848"],["Processor","Snapdragon 8 Gen 3"],["RAM","12GB / 16GB"],["Storage","256GB / 512GB / 1TB"],["Camera","13MP + 8MP ultrawide"],["Battery","11200mAh 45W wired"],["OS","Android 14 One UI 6.1"]] },
-  { name: "Samsung Galaxy Tab S10+", brand: "Samsung", category: "Tablet", priceIN: "INR 89,999", priceUS: "USD 899", amazonIN: "INR 86,999", amazonUS: "USD 879", year: "2024", score: 85, specs: [["Network","Wi-Fi 7 optional 5G"],["Display","12.4in AMOLED 120Hz"],["Processor","Snapdragon 8 Gen 3"],["RAM","12GB"],["Storage","256GB / 512GB"],["Camera","13MP + 8MP ultrawide"],["Battery","10090mAh 45W wired"],["OS","Android 14 One UI 6.1"]] },
-  { name: "Samsung Galaxy Tab S10 FE", brand: "Samsung", category: "Tablet", priceIN: "INR 49,999", priceUS: "USD 449", amazonIN: "INR 47,999", amazonUS: "USD 429", year: "2025", score: 76, specs: [["Network","Wi-Fi 6 optional 5G"],["Display","10.9in LTPS TFT 90Hz"],["Processor","Exynos 1580"],["RAM","6GB / 8GB"],["Storage","128GB / 256GB"],["Camera","8MP + 5MP"],["Battery","8000mAh 45W wired"],["OS","Android 15 One UI 7"]] },
-  { name: "MacBook Air M4 15-inch", brand: "Apple", category: "Laptop", priceIN: "INR 1,34,900", priceUS: "USD 1,299", amazonIN: "INR 1,30,000", amazonUS: "USD 1,279", year: "2025", score: 94, specs: [["Network","Wi-Fi 6E Bluetooth 5.3"],["Display","15.3in Liquid Retina 2880x1864"],["Processor","Apple M4 10-core CPU 10-core GPU"],["RAM","16GB / 32GB"],["Storage","256GB / 512GB / 1TB / 2TB SSD"],["Camera","12MP Center Stage"],["Battery","66.5Wh up to 18 hours"],["OS","macOS Sequoia 15"]] },
-  { name: "MacBook Air M4 13-inch", brand: "Apple", category: "Laptop", priceIN: "INR 1,14,900", priceUS: "USD 1,099", amazonIN: "INR 1,12,000", amazonUS: "USD 1,079", year: "2025", score: 93, specs: [["Network","Wi-Fi 6E Bluetooth 5.3"],["Display","13.6in Liquid Retina 2560x1664"],["Processor","Apple M4 10-core CPU 10-core GPU"],["RAM","16GB / 32GB"],["Storage","256GB / 512GB / 1TB / 2TB SSD"],["Camera","12MP Center Stage"],["Battery","52.6Wh up to 18 hours"],["OS","macOS Sequoia 15"]] },
-  { name: "MacBook Pro M4 14-inch", brand: "Apple", category: "Laptop", priceIN: "INR 1,69,900", priceUS: "USD 1,599", amazonIN: "INR 1,65,000", amazonUS: "USD 1,559", year: "2024", score: 96, specs: [["Network","Wi-Fi 6E Bluetooth 5.3"],["Display","14.2in Liquid Retina XDR 120Hz"],["Processor","Apple M4 Pro 12-core CPU 20-core GPU"],["RAM","24GB / 48GB"],["Storage","512GB / 1TB / 2TB SSD"],["Camera","12MP Center Stage"],["Battery","72.4Wh up to 24 hours"],["OS","macOS Sequoia 15"]] },
-  { name: "MacBook Pro M4 16-inch", brand: "Apple", category: "Laptop", priceIN: "INR 2,49,900", priceUS: "USD 2,499", amazonIN: "INR 2,39,000", amazonUS: "USD 2,449", year: "2024", score: 97, specs: [["Network","Wi-Fi 6E Bluetooth 5.3"],["Display","16.2in Liquid Retina XDR 120Hz"],["Processor","Apple M4 Max 16-core CPU 40-core GPU"],["RAM","48GB / 128GB"],["Storage","1TB / 2TB / 4TB SSD"],["Camera","12MP Center Stage"],["Battery","99.6Wh up to 24 hours"],["OS","macOS Sequoia 15"]] },
-  { name: "AirPods Pro 2nd Gen", brand: "Apple", category: "Earbuds", priceIN: "INR 24,900", priceUS: "USD 249", amazonIN: "INR 22,999", amazonUS: "USD 229", year: "2022", score: 91, specs: [["Type","In-ear TWS ANC"],["Chip","Apple H2"],["ANC","Active Noise Cancellation + Transparency"],["Battery","6hr + 24hr case"],["Connectivity","Bluetooth 5.3"],["Features","Adaptive Audio, Spatial Audio"],["Water","IPX4"],["Case","MagSafe charging"]] },
-  { name: "Sony WF-1000XM5", brand: "Sony", category: "Earbuds", priceIN: "INR 19,990", priceUS: "USD 279", amazonIN: "INR 17,999", amazonUS: "USD 249", year: "2023", score: 93, specs: [["Type","In-ear TWS ANC"],["Driver","8.4mm dynamic"],["ANC","Industry-leading ANC"],["Battery","8hr + 24hr case"],["Connectivity","Bluetooth 5.3 multipoint"],["Features","LDAC, 360 Reality Audio"],["Water","IPX4"],["Case","Wireless charging"]] },
-  { name: "Samsung Galaxy Buds3 Pro", brand: "Samsung", category: "Earbuds", priceIN: "INR 17,999", priceUS: "USD 199", amazonIN: "INR 16,999", amazonUS: "USD 189", year: "2024", score: 85, specs: [["Type","In-ear TWS ANC"],["Driver","10.5mm dynamic"],["ANC","Intelligent ANC"],["Battery","6hr + 21hr case"],["Connectivity","Bluetooth 5.4"],["Features","360 Audio, Galaxy AI"],["Water","IPX7"],["Case","Wireless charging"]] },
-  { name: "Nothing Ear (3)", brand: "Nothing", category: "Earbuds", priceIN: "INR 9,999", priceUS: "USD 149", amazonIN: "INR 9,499", amazonUS: "USD 139", year: "2025", score: 80, specs: [["Type","In-ear TWS ANC"],["Driver","11mm dynamic"],["ANC","Active Noise Cancellation 50dB"],["Battery","8hr + 40hr case"],["Connectivity","Bluetooth 5.3"],["Features","ChatGPT, Adaptive ANC, LHDC 5.0"],["Water","IP55"],["Case","Wireless charging"]] },
-  { name: "Apple Watch Series 10", brand: "Apple", category: "Smartwatch", priceIN: "INR 46,900", priceUS: "USD 399", amazonIN: "INR 44,999", amazonUS: "USD 379", year: "2024", score: 90, specs: [["Display","1.99in LTPO OLED Always-On"],["Chip","S10"],["Health","Heart rate, ECG, Blood oxygen, Crash detection"],["GPS","GPS + GNSS"],["Battery","Up to 36 hours"],["Connectivity","Bluetooth 5.3 Wi-Fi UWB"],["Water","50m water resistant"],["OS","watchOS 11"]] },
-  { name: "Samsung Galaxy Watch 7", brand: "Samsung", category: "Smartwatch", priceIN: "INR 29,999", priceUS: "USD 299", amazonIN: "INR 27,999", amazonUS: "USD 279", year: "2024", score: 84, specs: [["Display","1.47in AMOLED Always-On"],["Chip","Exynos W1000"],["Health","Heart rate, ECG, Blood oxygen, Body composition"],["GPS","GPS GLONASS BeiDou Galileo"],["Battery","Up to 40 hours"],["Connectivity","Bluetooth 5.3 Wi-Fi NFC"],["Water","5ATM + IP68"],["OS","Wear OS 5 One UI Watch 6"]] },
-]
-
+import { FormEvent, MouseEvent, useMemo, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { CatalogDevice, catalogDevices, formatInr, formatUsd } from '../lib/deviceCatalog'
 
 export default function SearchPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
-  const query = searchParams.get("q") || ""
-  const [results, setResults] = useState(devices)
-  const [loading, setLoading] = useState(false)
+  const query = (searchParams.get('q') || '').trim()
+
   const [search, setSearch] = useState(query)
-  const [selected, setSelected] = useState(null)
-  const [sortBy, setSortBy] = useState("relevance")
+  const [selected, setSelected] = useState<CatalogDevice | null>(null)
+  const [sortBy, setSortBy] = useState<'relevance' | 'score' | 'price_low' | 'price_high'>('relevance')
   const [wishlist, setWishlist] = useState<string[]>(() => {
-    try { return JSON.parse(localStorage.getItem("piq_wishlist") || "[]") } catch { return [] }
+    try {
+      return JSON.parse(localStorage.getItem('piq_wishlist') || '[]')
+    } catch {
+      return []
+    }
   })
   const [tracked, setTracked] = useState<string[]>(() => {
-    try { return JSON.parse(localStorage.getItem("piq_tracked") || "[]") } catch { return [] }
+    try {
+      return JSON.parse(localStorage.getItem('piq_tracked') || '[]')
+    } catch {
+      return []
+    }
   })
-  const toggleWishlist2 = (name: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    const next = wishlist.includes(name) ? wishlist.filter(x => x !== name) : [...wishlist, name]
-    setWishlist(next)
-    localStorage.setItem("piq_wishlist", JSON.stringify(next))
-  }
-  const toggleTrack2 = (name: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    const next = tracked.includes(name) ? tracked.filter(x => x !== name) : [...tracked, name]
-    setTracked(next)
-    localStorage.setItem("piq_tracked", JSON.stringify(next))
-  }
 
-  useEffect(() => {
-    setSearch(query)
-    setSelected(null)
-    setLoading(true)
-    setTimeout(() => {
-      if (!query) { setResults(devices); setLoading(false); return }
-      const q = query.toLowerCase()
-      const found = devices.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        p.brand.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q)
-      )
-      setResults(found.length > 0 ? found : devices)
-      setLoading(false)
-    }, 300)
+  const filtered = useMemo(() => {
+    if (!query) return catalogDevices
+    const q = query.toLowerCase()
+    return catalogDevices.filter(
+      (device) =>
+        device.name.toLowerCase().includes(q) ||
+        device.brand.toLowerCase().includes(q) ||
+        device.category.toLowerCase().includes(q),
+    )
   }, [query])
 
-  const sorted = [...results].sort((a, b) => {
-    if (sortBy === "score") return b.score - a.score
-    if (sortBy === "price_low") return parseInt(a.amazonIN.replace(/[^0-9]/g,"")) - parseInt(b.amazonIN.replace(/[^0-9]/g,""))
-    if (sortBy === "price_high") return parseInt(b.amazonIN.replace(/[^0-9]/g,"")) - parseInt(a.amazonIN.replace(/[^0-9]/g,""))
-    return 0
-  })
+  const sorted = useMemo(() => {
+    const list = [...(filtered.length ? filtered : catalogDevices)]
+    if (sortBy === 'score') return list.sort((a, b) => b.score - a.score)
+    if (sortBy === 'price_low') return list.sort((a, b) => a.priceIN - b.priceIN)
+    if (sortBy === 'price_high') return list.sort((a, b) => b.priceIN - a.priceIN)
+    return list
+  }, [filtered, sortBy])
 
-  const handleSearch = (e) => {
-    e.preventDefault()
-    if (search.trim()) navigate("/catalog/search?q=" + encodeURIComponent(search.trim()))
+  const toggleWishlist = (name: string, e: MouseEvent) => {
+    e.stopPropagation()
+    const next = wishlist.includes(name) ? wishlist.filter((x) => x !== name) : [...wishlist, name]
+    setWishlist(next)
+    localStorage.setItem('piq_wishlist', JSON.stringify(next))
   }
 
-  const sc = (s) => s >= 90 ? "#4caf50" : s >= 80 ? "#f3ad2c" : "#5b9bd5"
+  const toggleTrack = (name: string, e: MouseEvent) => {
+    e.stopPropagation()
+    const next = tracked.includes(name) ? tracked.filter((x) => x !== name) : [...tracked, name]
+    setTracked(next)
+    localStorage.setItem('piq_tracked', JSON.stringify(next))
+  }
 
-  // ── Detail View ──
-  if (selected) return (
-    <div style={{ maxWidth: "1100px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "24px" }}>
-        <button onClick={() => setSelected(null)}
-          style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--text-muted)", padding: "8px 16px", borderRadius: "6px", cursor: "pointer", fontFamily: "var(--mono)", fontSize: "0.7rem", textTransform: "uppercase" }}>
-          BACK
-        </button>
-        <span style={{ fontFamily: "var(--mono)", fontSize: "0.62rem", color: "var(--text-muted)" }}>
-          {selected.brand} / {selected.category} / {selected.name}
-        </span>
-      </div>
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault()
+    if (search.trim()) navigate('/catalog/search?q=' + encodeURIComponent(search.trim()))
+  }
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "24px" }}>
-        {/* Specs */}
-        <div style={{ background: "var(--sidebar-bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "28px" }}>
-          <div style={{ fontFamily: "var(--mono)", fontSize: "0.58rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "2px", marginBottom: "6px" }}>{selected.brand} · {selected.category} · {selected.year}</div>
-          <h1 style={{ fontFamily: "var(--serif)", fontSize: "1.9rem", fontWeight: "800", color: "var(--text-main)", margin: "0 0 6px" }}>{selected.name}</h1>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: `${sc(selected.score)}22`, border: `1px solid ${sc(selected.score)}44`, padding: "4px 10px", borderRadius: "4px", marginBottom: "24px" }}>
-            <span style={{ fontFamily: "var(--mono)", fontSize: "0.62rem", color: sc(selected.score) }}>AI SCORE</span>
-            <span style={{ fontFamily: "var(--mono)", fontSize: "1rem", fontWeight: "800", color: sc(selected.score) }}>{selected.score}</span>
-          </div>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <tbody>
-              {selected.specs.map(([label, value], i) => (
-                <tr key={label} style={{ background: i % 2 === 0 ? "rgba(0,0,0,0.1)" : "transparent" }}>
-                  <td style={{ padding: "11px 14px", fontFamily: "var(--mono)", fontSize: "0.62rem", color: "var(--accent-red)", textTransform: "uppercase", fontWeight: "700", width: "120px", borderBottom: "1px solid var(--border)" }}>{label}</td>
-                  <td style={{ padding: "11px 14px", fontFamily: "var(--sans)", fontSize: "0.85rem", color: "var(--text-main)", borderBottom: "1px solid var(--border)" }}>{value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+  const scoreColor = (score: number) => (score >= 90 ? '#4caf50' : score >= 80 ? '#f3ad2c' : '#5b9bd5')
+
+  if (selected) {
+    return (
+      <div style={{ maxWidth: '1100px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+          <button
+            onClick={() => setSelected(null)}
+            style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-muted)', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.7rem', textTransform: 'uppercase' }}
+          >
+            BACK
+          </button>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>
+            {selected.brand} / {selected.category} / {selected.name}
+          </span>
         </div>
 
-        {/* Price Panel */}
-        <div style={{ position: "sticky", top: "70px", alignSelf: "start" }}>
-          <div style={{ background: "var(--sidebar-bg)", border: "1px solid var(--border)", borderTop: "3px solid var(--accent-yellow)", borderRadius: "8px", padding: "20px", marginBottom: "12px" }}>
-            <div style={{ fontFamily: "var(--mono)", fontSize: "0.62rem", color: "var(--accent-yellow)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "16px" }}>PRICES</div>
-            {[
-              { store: "Amazon India", price: selected.amazonIN, sub: "amazon.in", color: "var(--accent-yellow)", best: true, url: "https://www.amazon.in/s?k=" + encodeURIComponent(selected.name) },
-              { store: "Amazon USA", price: selected.amazonUS, sub: "amazon.com", color: "#5b9bd5", best: false, url: "https://www.amazon.com/s?k=" + encodeURIComponent(selected.name) },
-              { store: "MRP India", price: selected.priceIN, sub: "official retail", color: "var(--text-muted)", best: false, url: null },
-              { store: "MRP USA", price: selected.priceUS, sub: "official retail", color: "var(--text-muted)", best: false, url: null },
-            ].map(s => (
-              <div key={s.store}
-                onClick={() => s.url && window.open(s.url, "_blank")}
-                style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 12px", background: s.best ? "rgba(243,173,44,0.06)" : "rgba(0,0,0,0.2)", borderRadius: "6px", border: `1px solid ${s.best ? "rgba(243,173,44,0.2)" : "var(--border)"}`, marginBottom: "8px", cursor: s.url ? "pointer" : "default", transition: "all 0.15s" }}>
-                <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <div style={{ fontFamily: "var(--sans)", fontSize: "0.82rem", color: "var(--text-main)", fontWeight: s.best ? "700" : "400" }}>{s.store}</div>
-                    {s.url && <span style={{ fontFamily: "var(--mono)", fontSize: "0.52rem", fontWeight: "700", color: s.color, border: "1px solid", borderColor: s.color, padding: "1px 5px", borderRadius: "3px" }}>BUY</span>}
-                  </div>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "0.56rem", color: "var(--text-muted)" }}>{s.sub}</div>
-                </div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: "0.92rem", fontWeight: "700", color: s.color }}>{s.price}</div>
-              </div>
-            ))}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '24px' }}>
+          <div style={{ background: 'var(--sidebar-bg)', border: '1px solid var(--border)', borderRadius: '8px', padding: '28px' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '0.58rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '6px' }}>
+              {selected.brand} · {selected.category} · {selected.year}
+            </div>
+            <h1 style={{ fontFamily: 'var(--serif)', fontSize: '1.9rem', fontWeight: '800', color: 'var(--text-main)', margin: '0 0 6px' }}>{selected.name}</h1>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: `${scoreColor(selected.score)}22`, border: `1px solid ${scoreColor(selected.score)}44`, padding: '4px 10px', borderRadius: '4px', marginBottom: '24px' }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: '0.62rem', color: scoreColor(selected.score) }}>AI SCORE</span>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: '1rem', fontWeight: '800', color: scoreColor(selected.score) }}>{selected.score}</span>
+            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <tbody>
+                {selected.specs.map(([label, value], idx) => (
+                  <tr key={label} style={{ background: idx % 2 === 0 ? 'rgba(0,0,0,0.1)' : 'transparent' }}>
+                    <td style={{ padding: '11px 14px', fontFamily: 'var(--mono)', fontSize: '0.62rem', color: 'var(--accent-red)', textTransform: 'uppercase', fontWeight: '700', width: '130px', borderBottom: '1px solid var(--border)' }}>{label}</td>
+                    <td style={{ padding: '11px 14px', fontFamily: 'var(--sans)', fontSize: '0.85rem', color: 'var(--text-main)', borderBottom: '1px solid var(--border)' }}>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div style={{ background: "var(--sidebar-bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "16px", textAlign: "center" }}>
-            <div style={{ fontFamily: "var(--mono)", fontSize: "0.6rem", color: "var(--text-muted)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: "1px" }}>AI PRICE SCORE</div>
-            <div style={{ fontFamily: "var(--mono)", fontSize: "3rem", fontWeight: "800", color: sc(selected.score), lineHeight: 1 }}>{selected.score}</div>
-            <div style={{ fontFamily: "var(--sans)", fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "6px" }}>
-              {selected.score >= 90 ? "Excellent value for money" : selected.score >= 80 ? "Good value" : "Average value"}
+
+          <div style={{ position: 'sticky', top: '70px', alignSelf: 'start' }}>
+            <div style={{ background: 'var(--sidebar-bg)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent-yellow)', borderRadius: '8px', padding: '20px', marginBottom: '12px' }}>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '0.62rem', color: 'var(--accent-yellow)', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px' }}>PRICES</div>
+              {[
+                { store: 'Amazon India', price: formatInr(selected.priceIN), sub: 'amazon.in', color: 'var(--accent-yellow)', url: selected.amazonIN },
+                { store: 'Amazon USA', price: formatUsd(selected.priceUS), sub: 'amazon.com', color: '#5b9bd5', url: selected.amazonUS },
+                { store: 'MRP India', price: formatInr(selected.mrpIN), sub: 'official retail', color: 'var(--text-muted)', url: '' },
+                { store: 'MRP USA', price: formatUsd(selected.mrpUS), sub: 'official retail', color: 'var(--text-muted)', url: '' },
+              ].map((row) => (
+                <div
+                  key={row.store}
+                  onClick={() => row.url && window.open(row.url, '_blank', 'noopener,noreferrer')}
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: row.url ? 'rgba(243,173,44,0.06)' : 'rgba(0,0,0,0.2)', borderRadius: '6px', border: `1px solid ${row.url ? 'rgba(243,173,44,0.2)' : 'var(--border)'}`, marginBottom: '8px', cursor: row.url ? 'pointer' : 'default' }}
+                >
+                  <div>
+                    <div style={{ fontFamily: 'var(--sans)', fontSize: '0.82rem', color: 'var(--text-main)', fontWeight: row.url ? '700' : '400' }}>{row.store}</div>
+                    <div style={{ fontFamily: 'var(--mono)', fontSize: '0.56rem', color: 'var(--text-muted)' }}>{row.sub}</div>
+                  </div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: '0.9rem', fontWeight: '700', color: row.color }}>{row.price}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ background: 'var(--sidebar-bg)', border: '1px solid var(--border)', borderRadius: '8px', padding: '16px', textAlign: 'center' }}>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'var(--text-muted)', marginBottom: '8px', textTransform: 'uppercase' }}>AI PRICE SCORE</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '3rem', fontWeight: '800', color: scoreColor(selected.score), lineHeight: 1 }}>{selected.score}</div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 
-  // ── Results View ──
   return (
-    <div style={{ maxWidth: "1200px" }}>
-      {/* Search bar */}
-      <div style={{ marginBottom: "20px" }}>
-        <div style={{ fontFamily: "var(--mono)", fontSize: "0.62rem", color: "var(--accent-red)", letterSpacing: "3px", textTransform: "uppercase", marginBottom: "10px" }}>DEVICE SEARCH</div>
+    <div style={{ maxWidth: '1200px' }}>
+      <div style={{ marginBottom: '20px' }}>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: '0.62rem', color: 'var(--accent-red)', letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '10px' }}>DEVICE SEARCH</div>
         <form onSubmit={handleSearch}>
-          <div style={{ display: "flex", gap: "10px" }}>
-            <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Search phones, laptops, tablets..."
-              style={{ flex: 1, background: "rgba(0,0,0,0.3)", border: "1px solid var(--border)", borderRadius: "8px", padding: "12px 18px", color: "var(--text-main)", fontFamily: "var(--sans)", fontSize: "0.95rem", outline: "none" }}
-              onFocus={e => (e.target.style.borderColor = "var(--accent-yellow)")}
-              onBlur={e => (e.target.style.borderColor = "var(--border)")} />
-            <button type="submit" style={{ background: "var(--accent-yellow)", border: "none", color: "#000", padding: "12px 24px", borderRadius: "8px", cursor: "pointer", fontFamily: "var(--mono)", fontSize: "0.78rem", fontWeight: "700", textTransform: "uppercase" }}>SEARCH</button>
-            <button type="button" onClick={() => navigate("/catalog")} style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--text-muted)", padding: "12px 18px", borderRadius: "8px", cursor: "pointer", fontFamily: "var(--mono)", fontSize: "0.7rem", textTransform: "uppercase" }}>BROWSE</button>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder='Search phones, laptops, tablets...'
+              style={{ flex: 1, minWidth: '260px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 18px', color: 'var(--text-main)', fontFamily: 'var(--sans)', fontSize: '0.95rem', outline: 'none' }}
+            />
+            <button type='submit' style={{ background: 'var(--accent-yellow)', border: 'none', color: '#000', padding: '12px 24px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase' }}>SEARCH</button>
+            <button type='button' onClick={() => navigate('/wishlist')} style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-muted)', padding: '12px 18px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.7rem', textTransform: 'uppercase' }}>WISHLIST</button>
+            <button type='button' onClick={() => navigate('/tracker')} style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-muted)', padding: '12px 18px', borderRadius: '8px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.7rem', textTransform: 'uppercase' }}>TRACKER</button>
           </div>
         </form>
 
-        {/* Filter + sort row */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "12px" }}>
-          <div style={{ fontFamily: "var(--mono)", fontSize: "0.68rem", color: "var(--text-muted)" }}>
-            {loading ? "Searching..." : `${sorted.length} devices${query ? ` for "${query}"` : ""}`}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', gap: '8px', flexWrap: 'wrap' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: '0.68rem', color: 'var(--text-muted)' }}>
+            {sorted.length} devices{query ? ` for "${query}"` : ''}
           </div>
-          <div style={{ display: "flex", gap: "6px" }}>
-            {[["relevance","RELEVANCE"],["score","AI SCORE"],["price_low","PRICE LOW"],["price_high","PRICE HIGH"]].map(([val, label]) => (
-              <button key={val} onClick={() => setSortBy(val)}
-                style={{ background: sortBy === val ? "var(--accent-yellow)" : "transparent", border: `1px solid ${sortBy === val ? "var(--accent-yellow)" : "var(--border)"}`, color: sortBy === val ? "#000" : "var(--text-muted)", padding: "4px 10px", borderRadius: "4px", cursor: "pointer", fontFamily: "var(--mono)", fontSize: "0.58rem", fontWeight: sortBy === val ? "700" : "400" }}>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            {[
+              ['relevance', 'RELEVANCE'],
+              ['score', 'AI SCORE'],
+              ['price_low', 'PRICE LOW'],
+              ['price_high', 'PRICE HIGH'],
+            ].map(([value, label]) => (
+              <button
+                key={value}
+                onClick={() => setSortBy(value as typeof sortBy)}
+                style={{ background: sortBy === value ? 'var(--accent-yellow)' : 'transparent', border: `1px solid ${sortBy === value ? 'var(--accent-yellow)' : 'var(--border)'}`, color: sortBy === value ? '#000' : 'var(--text-muted)', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.58rem', fontWeight: sortBy === value ? '700' : '400' }}
+              >
                 {label}
               </button>
             ))}
@@ -209,53 +175,65 @@ export default function SearchPage() {
         </div>
       </div>
 
-      {/* Results grid */}
-      {loading ? (
-        <div style={{ textAlign: "center", padding: "80px", fontFamily: "var(--mono)", color: "var(--text-muted)", fontSize: "0.8rem", letterSpacing: "3px" }}>SEARCHING...</div>
-      ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "14px" }}>
-          {sorted.map(p => (
-            <div key={p.name} onClick={() => setSelected(p)}
-              style={{ background: "var(--sidebar-bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "18px", cursor: "pointer", transition: "all 0.15s" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--accent-yellow)"; e.currentTarget.style.transform = "translateY(-2px)" }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "translateY(0)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
-                <div>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "0.56rem", color: "var(--text-muted)", textTransform: "uppercase", marginBottom: "3px" }}>{p.brand} · {p.category} · {p.year}</div>
-                  <div style={{ fontFamily: "var(--sans)", fontSize: "0.92rem", fontWeight: "700", color: "var(--text-main)", lineHeight: 1.3 }}>{p.name}</div>
-                </div>
-                <div style={{ background: sc(p.score), color: "#000", padding: "4px 8px", borderRadius: "4px", fontFamily: "var(--mono)", fontSize: "0.68rem", fontWeight: "700", flexShrink: 0, marginLeft: "8px" }}>{p.score}</div>
-                <div style={{ display: "flex", gap: "6px" }}>
-                  <button onClick={e => toggleWishlist2(p.name, e)}
-                    title={wishlist.includes(p.name) ? "Remove from Wishlist" : "Add to Wishlist"}
-                    style={{ background: wishlist.includes(p.name) ? "rgba(243,173,44,0.2)" : "rgba(255,255,255,0.05)", border: "1px solid " + (wishlist.includes(p.name) ? "var(--accent-yellow)" : "var(--border)"), color: wishlist.includes(p.name) ? "var(--accent-yellow)" : "var(--text-muted)", width: "30px", height: "30px", borderRadius: "5px", cursor: "pointer", fontSize: "0.85rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    {wishlist.includes(p.name) ? "♥" : "♡"}
-                  </button>
-                  <button onClick={e => toggleTrack2(p.name, e)}
-                    title={tracked.includes(p.name) ? "Stop Tracking" : "Track Price"}
-                    style={{ background: tracked.includes(p.name) ? "rgba(91,155,213,0.2)" : "rgba(255,255,255,0.05)", border: "1px solid " + (tracked.includes(p.name) ? "#5b9bd5" : "var(--border)"), color: tracked.includes(p.name) ? "#5b9bd5" : "var(--text-muted)", width: "30px", height: "30px", borderRadius: "5px", cursor: "pointer", fontSize: "0.7rem", fontFamily: "var(--mono)", fontWeight: "700", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    {tracked.includes(p.name) ? "↗" : "↗"}
-                  </button>
-                </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '14px' }}>
+        {sorted.map((device) => (
+          <div
+            key={device.name}
+            onClick={() => setSelected(device)}
+            style={{ background: 'var(--sidebar-bg)', border: '1px solid var(--border)', borderRadius: '8px', padding: '18px', cursor: 'pointer', transition: 'all 0.15s' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = 'var(--accent-yellow)'
+              e.currentTarget.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border)'
+              e.currentTarget.style.transform = 'translateY(0)'
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '0.56rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '3px' }}>{device.brand} · {device.category} · {device.year}</div>
+                <div style={{ fontFamily: 'var(--sans)', fontSize: '0.92rem', fontWeight: '700', color: 'var(--text-main)', lineHeight: 1.3 }}>{device.name}</div>
               </div>
-              <div style={{ fontFamily: "var(--mono)", fontSize: "0.62rem", color: "var(--text-muted)", marginBottom: "14px", lineHeight: 2 }}>
-                {p.specs.slice(1, 5).map(([l, v]) => <div key={l}><span style={{ color: "var(--accent-red)" }}>{l}:</span> {v}</div>)}
+              <div style={{ display: 'flex', gap: '6px', marginLeft: '8px' }}>
+                <div style={{ background: scoreColor(device.score), color: '#000', padding: '4px 8px', borderRadius: '4px', fontFamily: 'var(--mono)', fontSize: '0.68rem', fontWeight: '700' }}>{device.score}</div>
+                <button
+                  onClick={(event) => toggleWishlist(device.name, event)}
+                  title={wishlist.includes(device.name) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                  style={{ background: wishlist.includes(device.name) ? 'rgba(243,173,44,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${wishlist.includes(device.name) ? 'var(--accent-yellow)' : 'var(--border)'}`, color: wishlist.includes(device.name) ? 'var(--accent-yellow)' : 'var(--text-muted)', width: '30px', height: '30px', borderRadius: '5px', cursor: 'pointer' }}
+                >
+                  {wishlist.includes(device.name) ? '♥' : '♡'}
+                </button>
+                <button
+                  onClick={(event) => toggleTrack(device.name, event)}
+                  title={tracked.includes(device.name) ? 'Stop Tracking' : 'Track Price'}
+                  style={{ background: tracked.includes(device.name) ? 'rgba(91,155,213,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${tracked.includes(device.name) ? '#5b9bd5' : 'var(--border)'}`, color: tracked.includes(device.name) ? '#5b9bd5' : 'var(--text-muted)', width: '30px', height: '30px', borderRadius: '5px', cursor: 'pointer' }}
+                >
+                  ↗
+                </button>
               </div>
-              <div style={{ borderTop: "1px solid var(--border)", paddingTop: "12px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
-                <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "5px", padding: "8px 10px" }}>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "0.52rem", color: "var(--text-muted)", marginBottom: "2px" }}>AMAZON.IN</div>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "0.82rem", fontWeight: "700", color: "var(--accent-yellow)" }}>{p.amazonIN}</div>
-                </div>
-                <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "5px", padding: "8px 10px" }}>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "0.52rem", color: "var(--text-muted)", marginBottom: "2px" }}>AMAZON.COM</div>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "0.82rem", fontWeight: "700", color: "#5b9bd5" }}>{p.amazonUS}</div>
-                </div>
-              </div>
-              <div style={{ marginTop: "8px", fontFamily: "var(--mono)", fontSize: "0.6rem", color: "var(--accent-yellow)", textAlign: "right" }}>VIEW SPECS →</div>
             </div>
-          ))}
-        </div>
-      )}
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '0.62rem', color: 'var(--text-muted)', marginBottom: '14px', lineHeight: 2 }}>
+              {device.specs.slice(0, 4).map(([label, value]) => (
+                <div key={label}>
+                  <span style={{ color: 'var(--accent-red)' }}>{label}:</span> {value}
+                </div>
+              ))}
+            </div>
+            <div style={{ borderTop: '1px solid var(--border)', paddingTop: '12px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+              <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '5px', padding: '8px 10px' }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '0.52rem', color: 'var(--text-muted)', marginBottom: '2px' }}>AMAZON.IN</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '0.82rem', fontWeight: '700', color: 'var(--accent-yellow)' }}>{formatInr(device.priceIN)}</div>
+              </div>
+              <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '5px', padding: '8px 10px' }}>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '0.52rem', color: 'var(--text-muted)', marginBottom: '2px' }}>AMAZON.COM</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '0.82rem', fontWeight: '700', color: '#5b9bd5' }}>{formatUsd(device.priceUS)}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: '8px', fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'var(--accent-yellow)', textAlign: 'right' }}>VIEW SPECS →</div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="PriceIQ logo">
+  <rect width="128" height="128" rx="20" fill="#252525"/>
+  <path d="M28 92V36h26c14.4 0 24 8.2 24 20.6C78 69.4 68.3 78 54 78H40v14H28zm12-25h13.2c7.5 0 12.4-4 12.4-10.4 0-6.5-4.8-10.2-12.4-10.2H40V67z" fill="#f3ad2c"/>
+  <circle cx="94" cy="94" r="14" fill="#cc2229"/>
+</svg>

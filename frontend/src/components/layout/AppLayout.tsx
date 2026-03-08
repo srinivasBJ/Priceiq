@@ -8,12 +8,12 @@ const navItems = [
   { path: '/analytics', label: 'Analytics', icon: 'A' },
   { section: 'CATALOG' },
   { path: '/catalog', label: 'Browse Devices', icon: 'C' },
+  { path: '/deals', label: 'Deals', icon: '$' },
+  { path: '/compare', label: 'Compare', icon: '=' },
   { section: 'PRICING' },
-  { path: '/products', label: 'My Products', icon: 'P' },
-  { path: '/rules', label: 'Rules Engine', icon: 'R' },
-  { path: '/competitors', label: 'Competitors', icon: 'X' },
+  { path: '/wishlist', label: 'Wishlist', icon: 'W' },
+  { path: '/tracker', label: 'Tracker', icon: 'T' },
   { section: 'SYSTEM' },
-  { path: '/alerts', label: 'Alerts', icon: '!' },
   { path: '/settings', label: 'Settings', icon: 'S' },
 ]
 
@@ -22,10 +22,22 @@ export default function AppLayout() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [time, setTime] = useState(new Date())
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 980)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000)
     return () => clearInterval(t)
+  }, [])
+
+  useEffect(() => {
+    const onResize = () => {
+      const mobile = window.innerWidth < 980
+      setIsMobile(mobile)
+      if (!mobile) setMenuOpen(false)
+    }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
   }, [])
 
   const handleSearch = (e: React.FormEvent) => {
@@ -38,7 +50,7 @@ export default function AppLayout() {
 
   return (
     <div style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
-      <aside style={{ width: '240px', background: 'var(--sidebar-bg)', display: 'flex', flexDirection: 'column', borderRight: '1px solid var(--border)', position: 'fixed', height: '100vh', zIndex: 100 }}>
+      <aside style={{ width: '240px', background: 'var(--sidebar-bg)', display: 'flex', flexDirection: 'column', borderRight: '1px solid var(--border)', position: 'fixed', height: '100vh', zIndex: 100, transform: isMobile ? (menuOpen ? 'translateX(0)' : 'translateX(-100%)') : 'translateX(0)', transition: 'transform 0.2s ease' }}>
         <div style={{ padding: '24px 20px 16px', borderBottom: '1px solid var(--border)' }}>
           <div style={{ fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'var(--accent-red)', letterSpacing: '2px', textTransform: 'uppercase' }}>SYSTEM</div>
           <div style={{ fontFamily: 'var(--serif)', fontSize: '1.5rem', fontWeight: '800', color: 'var(--text-main)', lineHeight: 1.1 }}>PriceIQ</div>
@@ -64,6 +76,7 @@ export default function AppLayout() {
                 key={item.path}
                 to={item.path!}
                 end={item.path === '/'}
+                onClick={() => setMenuOpen(false)}
                 style={({ isActive }) => ({
                   display: 'flex',
                   alignItems: 'center',
@@ -96,16 +109,28 @@ export default function AppLayout() {
               </button>
             </div>
           ) : (
-            <button onClick={() => navigate('/login')} style={{ width: '100%', background: 'var(--accent-yellow)', border: 'none', color: '#000', padding: '8px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.7rem', fontWeight: '700', textTransform: 'uppercase' }}>
-              SIGN IN / REGISTER
-            </button>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: '0.62rem', color: 'var(--text-muted)' }}>
+              Use top-right Login/Sign Up
+            </div>
           )}
         </div>
       </aside>
 
-      <main style={{ marginLeft: '240px', flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <div style={{ height: '58px', background: 'var(--sidebar-bg)', display: 'flex', alignItems: 'center', padding: '0 24px', gap: '16px', borderBottom: '2px solid var(--accent-red)', position: 'sticky', top: 0, zIndex: 50 }}>
-          <form onSubmit={handleSearch} style={{ flex: 1, maxWidth: '500px', position: 'relative' }}>
+      {isMobile && menuOpen && (
+        <div
+          onClick={() => setMenuOpen(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 90 }}
+        />
+      )}
+
+      <main style={{ marginLeft: isMobile ? '0' : '240px', flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div style={{ height: '58px', background: 'var(--sidebar-bg)', display: 'flex', alignItems: 'center', padding: isMobile ? '0 14px' : '0 24px', gap: '10px', borderBottom: '2px solid var(--accent-red)', position: 'sticky', top: 0, zIndex: 50 }}>
+          {isMobile && (
+            <button onClick={() => setMenuOpen((open) => !open)} style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-main)', width: '34px', height: '34px', borderRadius: '6px', cursor: 'pointer', flexShrink: 0 }}>
+              ≡
+            </button>
+          )}
+          <form onSubmit={handleSearch} style={{ flex: 1, maxWidth: '560px', position: 'relative' }}>
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -119,27 +144,28 @@ export default function AppLayout() {
             </button>
           </form>
 
-          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.72rem', color: 'var(--text-muted)', flexShrink: 0 }}>
-            {time.toLocaleTimeString()}
-          </span>
-
-          {user ? (
-            <span style={{ fontFamily: 'var(--mono)', fontSize: '0.72rem', color: 'var(--text-muted)', flexShrink: 0 }}>
-              Hi, {user.name}
+          <div style={{ marginLeft: 'auto', display: isMobile ? 'none' : 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+              {time.toLocaleTimeString()}
             </span>
-          ) : (
-            <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
-              <button onClick={() => navigate('/login')} style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-muted)', padding: '6px 14px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.7rem', textTransform: 'uppercase' }}>
-                Login
-              </button>
-              <button onClick={() => navigate('/login')} style={{ background: 'var(--accent-yellow)', border: 'none', color: '#000', padding: '6px 14px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.7rem', fontWeight: '700', textTransform: 'uppercase' }}>
-                Sign Up
-              </button>
-            </div>
-          )}
+            {user ? (
+              <span style={{ fontFamily: 'var(--mono)', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                Hi, {user.name}
+              </span>
+            ) : (
+              <>
+                <button onClick={() => navigate('/login')} style={{ background: 'transparent', border: '1px solid var(--border)', color: 'var(--text-muted)', padding: '6px 14px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.7rem', textTransform: 'uppercase' }}>
+                  Login
+                </button>
+                <button onClick={() => navigate('/signup')} style={{ background: 'var(--accent-yellow)', border: 'none', color: '#000', padding: '6px 14px', borderRadius: '4px', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: '0.7rem', fontWeight: '700', textTransform: 'uppercase' }}>
+                  Sign Up
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
-        <div style={{ padding: '32px 40px', flex: 1 }}>
+        <div style={{ padding: isMobile ? '18px 14px' : '32px 40px', flex: 1 }}>
           <Outlet />
         </div>
       </main>

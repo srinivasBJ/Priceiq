@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import client from '../../api/client'
@@ -7,13 +7,25 @@ import { useAuthStore } from '../../store/authStore'
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
   const { setAuth, user } = useAuthStore()
-  const [mode, setMode] = useState<'login' | 'register'>('login')
+  const initialMode: 'login' | 'register' =
+    location.pathname === '/signup' || searchParams.get('mode') === 'register' ? 'register' : 'login'
+  const [mode, setMode] = useState<'login' | 'register'>(initialMode)
   const [form, setForm] = useState({ email: '', password: '', name: '', orgName: '' })
 
   useEffect(() => {
     if (user) navigate('/')
   }, [user])
+
+  useEffect(() => {
+    setMode(
+      location.pathname === '/signup' || searchParams.get('mode') === 'register'
+        ? 'register'
+        : 'login',
+    )
+  }, [location.pathname, searchParams])
 
   const loginMutation = useMutation({
     mutationFn: () => client.post('/auth/login', { email: form.email, password: form.password }),
@@ -38,7 +50,28 @@ export default function LoginPage() {
   })
 
   const loading = loginMutation.isPending || registerMutation.isPending
-  const submit = () => mode === 'login' ? loginMutation.mutate() : registerMutation.mutate()
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim().toLowerCase())
+
+  const submit = () => {
+    const email = form.email.trim().toLowerCase()
+    if (!isValidEmail(email)) {
+      toast.error('Please enter a valid email address')
+      return
+    }
+
+    if (mode === 'register' && (!form.name.trim() || !form.orgName.trim())) {
+      toast.error('Name and organization are required')
+      return
+    }
+
+    if (!form.password || form.password.length < 6) {
+      toast.error('Password must be at least 6 characters')
+      return
+    }
+
+    setForm((prev) => ({ ...prev, email }))
+    mode === 'login' ? loginMutation.mutate() : registerMutation.mutate()
+  }
 
   return (
     <div style={{ minHeight: '100vh', width: '100%', background: '#252525', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -70,7 +103,7 @@ export default function LoginPage() {
           )}
           <div>
             <label style={{ display: 'block', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.65rem', color: '#a0a0a0', textTransform: 'uppercase', marginBottom: '8px' }}>Email</label>
-            <input style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid #444', borderRadius: '5px', padding: '10px 14px', color: '#eee', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }} type="email" placeholder="you@example.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} onKeyDown={e => e.key === 'Enter' && submit()} />
+            <input style={{ width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid #444', borderRadius: '5px', padding: '10px 14px', color: '#eee', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }} type="email" placeholder="you@example.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} onKeyDown={e => e.key === 'Enter' && submit()} autoComplete="email" />
           </div>
           <div>
             <label style={{ display: 'block', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.65rem', color: '#a0a0a0', textTransform: 'uppercase', marginBottom: '8px' }}>Password</label>

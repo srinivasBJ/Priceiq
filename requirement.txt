@@ -1,0 +1,42 @@
+PriceIQ Requirements
+
+Runtime
+- Node.js 18+
+- npm 9+
+- PostgreSQL 14+
+- Redis 6+
+
+Frontend (workspace: frontend)
+- react 18.3.1
+- react-dom 18.3.1
+- react-router-dom 7.13.1
+- @tanstack/react-query 5.90.21
+- axios 1.13.5
+- recharts 3.7.0
+- zustand 5.0.11
+- vite 5.4.21
+- typescript 5.9.3
+
+Backend (workspace: backend)
+- express 5.2.1
+- @prisma/client 5.22.0
+- prisma 5.22.0
+- bcrypt 6.0.0
+- jsonwebtoken 9.0.3
+- zod 4.3.6
+- cors 2.8.6
+- helmet 8.1.0
+- express-rate-limit 8.2.1
+- bullmq 5.70.1
+- redis 5.11.0
+- dotenv 17.3.1
+- winston 3.19.0
+
+Environment variables (minimum)
+- DATABASE_URL
+- JWT_SECRET
+- JWT_REFRESH_SECRET
+- PORT
+- FRONTEND_URL
+- REDIS_URL
+- ANTHROPIC_API_KEY (optional unless AI features enabled)

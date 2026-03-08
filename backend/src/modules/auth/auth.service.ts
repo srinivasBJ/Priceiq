@@ -5,7 +5,10 @@ import { env } from '../../config/env'
 
 export const authService = {
   async register(email: string, password: string, name: string, orgName: string) {
-    const existing = await prisma.user.findUnique({ where: { email } })
+    const normalizedEmail = normalizeEmail(email)
+    if (!isValidEmail(normalizedEmail)) throw { status: 400, message: 'Invalid email address' }
+
+    const existing = await prisma.user.findUnique({ where: { email: normalizedEmail } })
     if (existing) throw { status: 409, message: 'Email already in use' }
 
     const hashed = await bcrypt.hash(password, 10)
@@ -18,7 +21,7 @@ export const authService = {
     })
 
     const user = await prisma.user.create({
-      data: { email, password: hashed, name, role: 'OWNER', organizationId: org.id },
+      data: { email: normalizedEmail, password: hashed, name, role: 'OWNER', organizationId: org.id },
     })
 
     const tokens = generateTokens(user.id, org.id)
@@ -26,7 +29,10 @@ export const authService = {
   },
 
   async login(email: string, password: string) {
-    const user = await prisma.user.findUnique({ where: { email } })
+    const normalizedEmail = normalizeEmail(email)
+    if (!isValidEmail(normalizedEmail)) throw { status: 400, message: 'Invalid email address' }
+
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } })
     if (!user) throw { status: 401, message: 'Invalid credentials' }
 
     const valid = await bcrypt.compare(password, user.password)
@@ -67,4 +73,12 @@ function generateTokens(userId: string, organizationId: string) {
 function sanitize(user: any) {
   const { password, ...rest } = user
   return rest
+}
+
+function normalizeEmail(email: string) {
+  return String(email || '').trim().toLowerCase()
+}
+
+function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)
 }

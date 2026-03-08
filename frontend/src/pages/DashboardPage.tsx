@@ -127,13 +127,15 @@ const categories = [
 ]
 
 const activityLog = [
-  { text: "Price drop detected: OnePlus 13 down 8% on Amazon.in", time: "2m ago", type: "success" },
-  { text: "New device listed: Samsung Galaxy S26 Ultra", time: "12m ago", type: "info" },
-  { text: "Alert: iPhone 16 Pro still 8% above your target", time: "28m ago", type: "warning" },
-  { text: "Xiaomi 14 Ultra price updated — INR 97,999", time: "1h ago", type: "success" },
-  { text: "MacBook Pro M4 hit your target price!", time: "2h ago", type: "success" },
-  { text: "Google Pixel 9 Pro price dropped INR 2,000", time: "3h ago", type: "info" },
+  { text: "Price drop detected: OnePlus 13 down 8% on Amazon.in", time: "2m ago", type: "success", url: "https://www.amazon.in/s?k=OnePlus+13" },
+  { text: "New device listed: Samsung Galaxy S26 Ultra", time: "12m ago", type: "info", url: "https://www.amazon.in/s?k=Samsung+Galaxy+S26+Ultra" },
+  { text: "Alert: iPhone 16 Pro still 8% above your target", time: "28m ago", type: "warning", url: "https://www.amazon.in/s?k=iPhone+16+Pro" },
+  { text: "Xiaomi 14 Ultra price updated — INR 97,999", time: "1h ago", type: "success", url: "https://www.amazon.in/s?k=Xiaomi+14+Ultra" },
+  { text: "MacBook Pro M4 hit your target price!", time: "2h ago", type: "success", url: "https://www.amazon.in/s?k=MacBook+Pro+M4+14" },
+  { text: "Google Pixel 9 Pro price dropped INR 2,000", time: "3h ago", type: "info", url: "https://www.amazon.in/s?k=Google+Pixel+9+Pro" },
 ]
+
+const PROJECT_FILE_COUNT = 83
 
 const generatePriceHistory = () =>
   Array.from({ length: 14 }, (_, i) => ({
@@ -171,6 +173,7 @@ export default function DashboardPage() {
     { label: "PRICE DROPS TODAY", value: 47, suffix: "", sub: "updated in last hour", color: "#4caf50", spark: [5,8,6,10,7,12,9,14,11,16,13,18], delay: 200 },
     { label: "AVG SAVINGS", value: 12.4, suffix: "%", decimals: 1, sub: "vs retail MRP", color: "#5b9bd5", spark: [8,9,8,10,11,10,12,11,13,12,14,13], delay: 300 },
     { label: "ACTIVE ALERTS", value: 3, suffix: "", sub: "on your watchlist", color: "var(--accent-red)", spark: [1,2,1,3,2,4,3,5,4,3,4,3], delay: 400 },
+    { label: "PROJECT FILES", value: PROJECT_FILE_COUNT, suffix: "", sub: "workspace files after cleanup", color: "#5b9bd5", spark: [150,145,138,130,122,116,112,108,100,94,90,81], delay: 500 },
   ]
 
   return (
@@ -218,7 +221,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "28px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "16px", marginBottom: "28px" }}>
         {statCards.map((s, i) => (
           <div key={i} style={{ background: "var(--sidebar-bg)", border: "1px solid var(--border)", borderRadius: "8px", padding: "20px", transition: "all 0.25s", cursor: "default" }}
             onMouseEnter={e => { e.currentTarget.style.borderColor = s.color; e.currentTarget.style.boxShadow = `0 0 20px ${s.color}22` }}
@@ -391,7 +394,11 @@ export default function DashboardPage() {
             const colors = { success: "#4caf50", warning: "#f3ad2c", info: "#5b9bd5" }
             const icons = { success: "✓", warning: "!", info: "→" }
             return (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 0", borderBottom: i < activityLog.length - 1 ? "1px solid var(--border)" : "none" }}>
+              <div
+                key={i}
+                style={{ display: "flex", alignItems: "center", gap: "12px", padding: "10px 0", borderBottom: i < activityLog.length - 1 ? "1px solid var(--border)" : "none", cursor: item.url ? "pointer" : "default" }}
+                onClick={() => item.url && window.open(item.url, "_blank", "noopener,noreferrer")}
+              >
                 <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: `${colors[item.type]}22`, border: `1px solid ${colors[item.type]}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.58rem", color: colors[item.type], flexShrink: 0, fontWeight: "bold" }}>{icons[item.type]}</div>
                 <span style={{ flex: 1, fontSize: "0.82rem", color: "var(--text-muted)" }}>{item.text}</span>
                 <span style={{ fontFamily: "var(--mono)", fontSize: "0.6rem", color: "var(--text-muted)", opacity: 0.6, flexShrink: 0 }}>{item.time}</span>

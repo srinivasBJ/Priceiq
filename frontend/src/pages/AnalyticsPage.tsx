@@ -1,4 +1,5 @@
 import { useState } from "react"
+import type { ReactNode } from "react"
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell
@@ -33,11 +34,11 @@ const categoryData = [
 ]
 
 const topDrops = [
-  { name: "Samsung Galaxy Tab S10+", from: "INR 89,999", to: "INR 79,999", pct: 11.1, days: 2 },
-  { name: "Nothing Phone 3", from: "INR 64,999", to: "INR 57,999", pct: 10.8, days: 1 },
-  { name: "OnePlus 13R", from: "INR 46,999", to: "INR 41,999", pct: 10.6, days: 3 },
-  { name: "Google Pixel 9", from: "INR 82,999", to: "INR 74,999", pct: 9.6, days: 5 },
-  { name: "OnePlus 13", from: "INR 74,999", to: "INR 67,999", pct: 9.3, days: 7 },
+  { name: "Samsung Galaxy Tab S10+", from: "INR 89,999", to: "INR 79,999", pct: 11.1, days: 2, url: "https://www.amazon.in/s?k=Samsung+Galaxy+Tab+S10%2B" },
+  { name: "Nothing Phone 3", from: "INR 64,999", to: "INR 57,999", pct: 10.8, days: 1, url: "https://www.amazon.in/s?k=Nothing+Phone+3" },
+  { name: "OnePlus 13R", from: "INR 46,999", to: "INR 41,999", pct: 10.6, days: 3, url: "https://www.amazon.in/s?k=OnePlus+13R" },
+  { name: "Google Pixel 9", from: "INR 82,999", to: "INR 74,999", pct: 9.6, days: 5, url: "https://www.amazon.in/s?k=Google+Pixel+9" },
+  { name: "OnePlus 13", from: "INR 74,999", to: "INR 67,999", pct: 9.3, days: 7, url: "https://www.amazon.in/s?k=OnePlus+13" },
 ]
 
 const volumeData = Array.from({ length: 30 }, (_, i) => ({
@@ -45,7 +46,7 @@ const volumeData = Array.from({ length: 30 }, (_, i) => ({
   searches: Math.floor(1000 + Math.random() * 600),
 }))
 
-function CustomTooltip({ active, payload, label }) {
+function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ color?: string; name?: string; value?: number | string }>; label?: string }) {
   if (!active || !payload?.length) return null
   return (
     <div style={{ background: "#1a1a1a", border: "1px solid var(--border)", borderRadius: "6px", padding: "10px 14px", fontFamily: "var(--mono)", fontSize: "0.72rem" }}>
@@ -57,7 +58,7 @@ function CustomTooltip({ active, payload, label }) {
   )
 }
 
-function Panel({ title, sub, children }) {
+function Panel({ title, sub, children }: { title: string; sub?: string; children: ReactNode }) {
   return (
     <div style={{ background: "var(--sidebar-bg)", border: "1px solid var(--border)", borderRadius: "8px" }}>
       <div style={{ padding: "14px 20px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -200,6 +201,7 @@ export default function AnalyticsPage() {
           <tbody>
             {topDrops.map((d, i) => (
               <tr key={i} style={{ cursor: "pointer" }}
+                onClick={() => window.open(d.url, "_blank", "noopener,noreferrer")}
                 onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.03)")}
                 onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
                 <td style={{ padding: "12px", fontFamily: "var(--sans)", fontSize: "0.85rem", color: "var(--text-main)", borderBottom: "1px solid var(--border)" }}>{d.name}</td>
