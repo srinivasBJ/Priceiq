@@ -46,7 +46,7 @@ function Sparkline({ data, color }) {
 }
 
 // ── Custom Tooltip ────────────────────────────────────────────────
-function CustomTooltip({ active, payload, label }) {
+function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null
   return (
     <div style={{ background: "#1a1a1a", border: "1px solid var(--border)", borderRadius: "6px", padding: "10px 14px", fontFamily: "var(--mono)", fontSize: "0.75rem" }}>
