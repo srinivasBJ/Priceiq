@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-dark:       #252525;
+  --sidebar-bg:    #333333;
+  --accent-yellow: #f3ad2c;
+  --accent-red:    #cc2229;
+  --text-main:     #eeeeee;
+  --text-muted:    #a0a0a0;
+  --nav-hover:     #444444;
+  --bg-card:       #2e2e2eb3;
+  --bg-panel:      #333333;
+  --border:        #444444;
+  --border-lit:    #555555;
+  --green:         #4caf50;
+  --blue:          #5b9bd5;
+  --transition:    all 0.2s ease;
+  --mono:          'IBM Plex Mono', monospace;
+  --serif:         'Libre Baskerville', Georgia, serif;
+  --sans:          'DM Sans', -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--sans);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root { display: flex; width: 100%; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--border-lit); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-yellow); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.badge {
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.badge-green  { background: #2e7d32; color: #fff; }
+.badge-red    { background: var(--accent-red); color: #fff; }
+.badge-yellow { background: var(--accent-yellow); color: #000; }
+.badge-blue   { background: #1a5f8a; color: #fff; }
+.badge-gray   { background: #555; color: #aaa; }
+
+.btn {
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary { background: var(--accent-yellow); color: #000; }
+.btn-primary:hover { background: #e09c1a; transform: translateY(-1px); }
+
+.btn-danger { background: rgba(204,34,41,0.2); color: #ff6b6b; border: 1px solid rgba(204,34,41,0.4); }
+.btn-danger:hover { background: rgba(204,34,41,0.35); }
+
+.btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--text-main); border-color: var(--border-lit); }
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+
+.panel-header {
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+}
+
+.panel-title {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--accent-yellow);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.panel-body { padding: 22px; }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th {
+  padding: 10px 16px;
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--border);
+  background: var(--bg-card);
+}
+.data-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--nav-hover); }
+
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.form-control {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 10px 14px;
+  color: var(--text-main);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  transition: border-color 0.15s;
+  outline: none;
+}
+.form-control:focus { border-color: var(--accent-yellow); }
