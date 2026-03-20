@@ -1,10 +1,16 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { env } from '../../config/env'
 
-const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
+const getClient = () => {
+  if (!env.ANTHROPIC_API_KEY) {
+    throw new Error('ANTHROPIC_API_KEY is not configured')
+  }
+  return new Anthropic({ apiKey: env.ANTHROPIC_API_KEY })
+}
 
 export const aiService = {
   async chat(messages: { role: 'user' | 'assistant'; content: string }[], stream: any) {
+    const client = getClient()
     const response = await client.messages.stream({
       model: 'claude-opus-4-6',
       max_tokens: 1024,
@@ -27,6 +33,7 @@ export const aiService = {
   },
 
   async getRecommendations(products: any[]) {
+    const client = getClient()
     const response = await client.messages.create({
       model: 'claude-opus-4-6',
       max_tokens: 1024,

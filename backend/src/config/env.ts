@@ -13,7 +13,7 @@ const envSchema = z.object({
   JWT_REFRESH_SECRET: z.string(),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
 
-  ANTHROPIC_API_KEY: z.string(),
+  ANTHROPIC_API_KEY: z.string().default(''),
 
   RATE_LIMIT_WINDOW_MS: z.string().default('60000'),
   RATE_LIMIT_MAX: z.string().default('100'),
