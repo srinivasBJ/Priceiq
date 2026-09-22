@@ -1,0 +1,5 @@
+strategy_a,strategy_b,unit_of_analysis,null_hypothesis,alternative_hypothesis,confidence_level,multiple_comparison_handling,n_pairs,status,reason,mean_difference,ci_lower,ci_upper,wilcoxon
+FULL_PRICEIQ,BUY_NOW,product decision point,mean paired regret difference is zero,two-sided,0.95,not performed; exploratory,0,NOT_PERFORMED,fewer than 10 paired non-null decision points,,,,not performed
+FULL_PRICEIQ,30_DAY_AVERAGE,product decision point,mean paired regret difference is zero,two-sided,0.95,not performed; exploratory,0,NOT_PERFORMED,fewer than 10 paired non-null decision points,,,,not performed
+FULL_PRICEIQ,EMA_ONLY,product decision point,mean paired regret difference is zero,two-sided,0.95,not performed; exploratory,0,NOT_PERFORMED,fewer than 10 paired non-null decision points,,,,not performed
+FULL_PRICEIQ,14_OBSERVATION_SLOPE_ONLY,product decision point,mean paired regret difference is zero,two-sided,0.95,not performed; exploratory,0,NOT_PERFORMED,fewer than 10 paired non-null decision points,,,,not performed

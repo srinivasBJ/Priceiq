@@ -1,0 +1,16 @@
+{
+  "calibration_results": {
+    "calibration_end": "2026-08-15",
+    "calibration_score": 0.82818249,
+    "configuration_hash": "0f0c8277e6f36ab6ec09d4d74c8e4bcdf949cd46499fb436a2bfb9c5a22df4af"
+  },
+  "historical_facts": "Original deterministic engine and thresholds are lost; no recovery attempted.",
+  "methodology": "PriceIQ Research v1.0",
+  "new_methodology": "New fixed features with calibrated, frozen thresholds; not the original implementation.",
+  "publication_eligible": true,
+  "status": "COMPLETE",
+  "unseen_test_results": {
+    "n_decision_points": 2039,
+    "test_rule": "timestamp strictly after 2026-08-15"
+  }
+}

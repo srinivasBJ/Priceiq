@@ -1,0 +1,78 @@
+{
+  "calibration": {
+    "actionable_coverage": 1.0,
+    "calibration_end": "2026-08-15",
+    "candidate_count": 726,
+    "candidate_counts": {
+      "ema": {
+        "active_candidate_pairs": 10,
+        "disabled_candidate": 1,
+        "empirical_cut_points": 5,
+        "non_discriminating": false,
+        "observed_unique_values": 482
+      },
+      "historical_low_proximity": {
+        "active_candidate_thresholds": 5,
+        "disabled_candidate": 1,
+        "empirical_cut_points": 5,
+        "non_discriminating": false,
+        "observed_unique_values": 33
+      },
+      "slope": {
+        "active_candidate_pairs": 10,
+        "disabled_candidate": 1,
+        "empirical_cut_points": 5,
+        "non_discriminating": false,
+        "observed_unique_values": 275
+      }
+    },
+    "config_path": "/Users/trylub/Desktop/Priceiq-main/research/config/priceiq_v1.yaml",
+    "configuration_hash": "0f0c8277e6f36ab6ec09d4d74c8e4bcdf949cd46499fb436a2bfb9c5a22df4af",
+    "dataset_hash": "f7bc3cbb6afae0c44854a877bfe16235ef63fd2cfd18cdd99a2a278a95df4004",
+    "disabled_features": [
+      "ema"
+    ],
+    "methodology": "PriceIQ Research v1.0",
+    "n_calibration_cases": 2718,
+    "objective": "mean neutral-WATCH binary action score; BUY if no lower observed price within horizon, otherwise WAIT; AVOID maps to WAIT",
+    "selected_score": 0.8281824871228844,
+    "selected_thresholds": {
+      "ema_elevated_threshold": null,
+      "ema_favourable_threshold": null,
+      "historical_low_proximity_threshold": 1.2512562814070352,
+      "slope_downward_threshold": -63.2967032967033,
+      "slope_upward_threshold": -4.747252747252749
+    }
+  },
+  "code_version_commit": null,
+  "comparison": {
+    "ablation_file": "ablation.csv",
+    "statistical_summary_file": "statistical_summary.csv",
+    "strategies": [
+      "PRICEIQ_RESEARCH_V1",
+      "BUY_NOW",
+      "30_DAY_AVERAGE",
+      "EMA_ONLY",
+      "14_OBSERVATION_SLOPE_ONLY"
+    ],
+    "test_cutoff": "2026-08-15",
+    "test_decision_points": 2039
+  },
+  "configuration_hash": "0f0c8277e6f36ab6ec09d4d74c8e4bcdf949cd46499fb436a2bfb9c5a22df4af",
+  "dataset_filename": "historical_prices.csv",
+  "dataset_hash": "f7bc3cbb6afae0c44854a877bfe16235ef63fd2cfd18cdd99a2a278a95df4004",
+  "date_range": [
+    "2026-06-27T00:00:00",
+    "2026-09-22T00:00:00"
+  ],
+  "decision_rule_version": "1.0",
+  "dependency_versions": {
+    "external_runtime_dependencies": "none (Python standard library)",
+    "research": "0.1.0"
+  },
+  "evaluation_horizon_days": 7,
+  "execution_timestamp": "2026-09-22T13:08:33.000329+00:00",
+  "product_count": 167,
+  "python_version": "3.14.7",
+  "row_count": 7760
+}

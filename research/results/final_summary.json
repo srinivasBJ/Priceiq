@@ -1,0 +1,241 @@
+{
+  "methodology": "PriceIQ Research v1.0",
+  "status": "COMPLETE",
+  "calibration": {
+    "actionable_coverage": 1.0,
+    "calibration_end": "2026-08-15",
+    "candidate_count": 726,
+    "candidate_counts": {
+      "ema": {
+        "active_candidate_pairs": 10,
+        "disabled_candidate": 1,
+        "empirical_cut_points": 5,
+        "non_discriminating": false,
+        "observed_unique_values": 482
+      },
+      "historical_low_proximity": {
+        "active_candidate_thresholds": 5,
+        "disabled_candidate": 1,
+        "empirical_cut_points": 5,
+        "non_discriminating": false,
+        "observed_unique_values": 33
+      },
+      "slope": {
+        "active_candidate_pairs": 10,
+        "disabled_candidate": 1,
+        "empirical_cut_points": 5,
+        "non_discriminating": false,
+        "observed_unique_values": 275
+      }
+    },
+    "config_path": "/Users/trylub/Desktop/Priceiq-main/research/config/priceiq_v1.yaml",
+    "configuration_hash": "0f0c8277e6f36ab6ec09d4d74c8e4bcdf949cd46499fb436a2bfb9c5a22df4af",
+    "dataset_hash": "f7bc3cbb6afae0c44854a877bfe16235ef63fd2cfd18cdd99a2a278a95df4004",
+    "disabled_features": [
+      "ema"
+    ],
+    "methodology": "PriceIQ Research v1.0",
+    "n_calibration_cases": 2718,
+    "objective": "mean neutral-WATCH binary action score; BUY if no lower observed price within horizon, otherwise WAIT; AVOID maps to WAIT",
+    "selected_score": 0.8281824871228844,
+    "selected_thresholds": {
+      "ema_elevated_threshold": null,
+      "ema_favourable_threshold": null,
+      "historical_low_proximity_threshold": 1.2512562814070352,
+      "slope_downward_threshold": -63.2967032967033,
+      "slope_upward_threshold": -4.747252747252749
+    }
+  },
+  "unseen_test": {
+    "cutoff": "2026-08-15",
+    "n_decision_points": 2039,
+    "test_rule": "timestamp strictly after calibration cutoff",
+    "priceiq_metrics": {
+      "strategy": "PRICEIQ_RESEARCH_V1",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 22.151326326326327,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "BUY": 1998,
+        "WATCH": 41
+      },
+      "opportunity_capture_if_defined": null
+    }
+  },
+  "baseline_metrics": [
+    {
+      "strategy": "BUY_NOW",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 22.98300637567435,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "BUY": 2039
+      },
+      "opportunity_capture_if_defined": null
+    },
+    {
+      "strategy": "30_DAY_AVERAGE",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 15.58067189798921,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "BUY": 1580,
+        "WAIT": 459
+      },
+      "opportunity_capture_if_defined": null
+    },
+    {
+      "strategy": "EMA_ONLY",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 12.262471799901913,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "BUY": 1351,
+        "WAIT": 688
+      },
+      "opportunity_capture_if_defined": null
+    },
+    {
+      "strategy": "14_OBSERVATION_SLOPE_ONLY",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 35.45221186856302,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "WAIT": 536,
+        "BUY": 1503
+      },
+      "opportunity_capture_if_defined": null
+    }
+  ],
+  "ablation_metrics": [
+    {
+      "ablation": "Full V1",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 22.151326326326327,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "BUY": 1998,
+        "WATCH": 41
+      },
+      "disabled_features": "ema"
+    },
+    {
+      "ablation": "V1 without EMA",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 22.151326326326327,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "BUY": 1998,
+        "WATCH": 41
+      },
+      "disabled_features": "ema"
+    },
+    {
+      "ablation": "V1 without slope",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 22.140245122561282,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "BUY": 1999,
+        "WATCH": 40
+      },
+      "disabled_features": "ema,slope"
+    },
+    {
+      "ablation": "V1 without historical-low proximity",
+      "n_decisions": 2039,
+      "mean_potential_saving": 22.98300637567435,
+      "median_potential_saving": 0.0,
+      "mean_regret": 22.99428361138371,
+      "median_regret": 0.0,
+      "decision_counts": {
+        "BUY": 2038,
+        "WATCH": 1
+      },
+      "disabled_features": "ema,historical_low_proximity"
+    }
+  ],
+  "statistical_summary": [
+    {
+      "strategy_a": "PRICEIQ_RESEARCH_V1",
+      "strategy_b": "BUY_NOW",
+      "unit_of_analysis": "product decision point",
+      "null_hypothesis": "mean paired regret difference is zero",
+      "alternative_hypothesis": "two-sided",
+      "confidence_level": 0.95,
+      "multiple_comparison_handling": "not performed; exploratory",
+      "n_pairs": 1998,
+      "status": "EXPLORATORY_BOOTSTRAP",
+      "reason": "bootstrap CI only; Wilcoxon unavailable without a validated external statistics dependency",
+      "mean_difference": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0,
+      "wilcoxon": "not performed"
+    },
+    {
+      "strategy_a": "PRICEIQ_RESEARCH_V1",
+      "strategy_b": "30_DAY_AVERAGE",
+      "unit_of_analysis": "product decision point",
+      "null_hypothesis": "mean paired regret difference is zero",
+      "alternative_hypothesis": "two-sided",
+      "confidence_level": 0.95,
+      "multiple_comparison_handling": "not performed; exploratory",
+      "n_pairs": 1998,
+      "status": "EXPLORATORY_BOOTSTRAP",
+      "reason": "bootstrap CI only; Wilcoxon unavailable without a validated external statistics dependency",
+      "mean_difference": 6.531211211211212,
+      "ci_lower": 2.554969969969971,
+      "ci_upper": 10.037712712712713,
+      "wilcoxon": "not performed"
+    },
+    {
+      "strategy_a": "PRICEIQ_RESEARCH_V1",
+      "strategy_b": "EMA_ONLY",
+      "unit_of_analysis": "product decision point",
+      "null_hypothesis": "mean paired regret difference is zero",
+      "alternative_hypothesis": "two-sided",
+      "confidence_level": 0.95,
+      "multiple_comparison_handling": "not performed; exploratory",
+      "n_pairs": 1998,
+      "status": "EXPLORATORY_BOOTSTRAP",
+      "reason": "bootstrap CI only; Wilcoxon unavailable without a validated external statistics dependency",
+      "mean_difference": 9.917502502502503,
+      "ci_lower": 5.55430930930931,
+      "ci_upper": 13.633408408408409,
+      "wilcoxon": "not performed"
+    },
+    {
+      "strategy_a": "PRICEIQ_RESEARCH_V1",
+      "strategy_b": "14_OBSERVATION_SLOPE_ONLY",
+      "unit_of_analysis": "product decision point",
+      "null_hypothesis": "mean paired regret difference is zero",
+      "alternative_hypothesis": "two-sided",
+      "confidence_level": 0.95,
+      "multiple_comparison_handling": "not performed; exploratory",
+      "n_pairs": 1998,
+      "status": "EXPLORATORY_BOOTSTRAP",
+      "reason": "bootstrap CI only; Wilcoxon unavailable without a validated external statistics dependency",
+      "mean_difference": -12.42477977977978,
+      "ci_lower": -15.161681681681682,
+      "ci_upper": -9.742112112112112,
+      "wilcoxon": "not performed"
+    }
+  ],
+  "publication_eligible": true
+}

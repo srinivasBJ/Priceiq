@@ -1,0 +1,6 @@
+ablation,status,reason
+EMA only,UNAVAILABLE,Production PriceIQ signal thresholds/precedence are not recoverable.
+EMA + historical-low proximity,UNAVAILABLE,Production PriceIQ signal thresholds/precedence are not recoverable.
+EMA + slope,UNAVAILABLE,Production PriceIQ signal thresholds/precedence are not recoverable.
+EMA + slope + historical-low proximity,UNAVAILABLE,Production PriceIQ signal thresholds/precedence are not recoverable.
+Full PriceIQ,UNAVAILABLE,Production PriceIQ signal thresholds/precedence are not recoverable.

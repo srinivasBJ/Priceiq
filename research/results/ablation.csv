@@ -1,0 +1,5 @@
+ablation,n_decisions,mean_potential_saving,median_potential_saving,mean_regret,median_regret,decision_counts,disabled_features
+Full V1,2039,22.98300637567435,0.0,22.151326326326327,0.0,"{'BUY': 1998, 'WATCH': 41}",ema
+V1 without EMA,2039,22.98300637567435,0.0,22.151326326326327,0.0,"{'BUY': 1998, 'WATCH': 41}",ema
+V1 without slope,2039,22.98300637567435,0.0,22.140245122561282,0.0,"{'BUY': 1999, 'WATCH': 40}","ema,slope"
+V1 without historical-low proximity,2039,22.98300637567435,0.0,22.99428361138371,0.0,"{'BUY': 2038, 'WATCH': 1}","ema,historical_low_proximity"

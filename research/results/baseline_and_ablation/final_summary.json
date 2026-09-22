@@ -1,0 +1,9 @@
+{
+  "dataset": "historical_prices.csv",
+  "dataset_classification": "PRIMARY_HISTORICAL_PRICE_DATA",
+  "mode": "HISTORICAL_PRICE_EVALUATION",
+  "publication_eligible": false,
+  "reason": null,
+  "status": "COMPLETE",
+  "valid_decision_points": 5422
+}

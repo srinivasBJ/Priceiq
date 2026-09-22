@@ -1,0 +1,23 @@
+# PriceIQ Research v1.0 -- NEW calibrated methodology, not the lost production implementation.
+methodology_name: "PriceIQ Research v1.0"
+methodology_version: "1.0"
+configuration_status: "FROZEN"
+ema_alpha: 0.15
+reference_window_days: 30
+regression_window: 14
+evaluation_horizon_days: 7
+ema_feature_enabled: false
+ema_favourable_threshold: null
+ema_elevated_threshold: null
+slope_feature_enabled: true
+slope_downward_threshold: -63.2967032967033
+slope_upward_threshold: -4.747252747252749
+historical_low_feature_enabled: true
+historical_low_proximity_threshold: 1.2512562814070352
+target_price_enabled: false
+calibration_end: "2026-08-15"
+calibration_dataset_hash: "f7bc3cbb6afae0c44854a877bfe16235ef63fd2cfd18cdd99a2a278a95df4004"
+calibration_n_decision_points: 2718
+calibration_candidate_count: 726
+calibration_objective: "mean neutral-WATCH binary action score; BUY if no lower observed price within horizon, otherwise WAIT; AVOID maps to WAIT"
+calibration_score: 0.82818249

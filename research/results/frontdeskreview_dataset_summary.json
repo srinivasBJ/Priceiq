@@ -1,0 +1,32 @@
+{
+  "total_source_records": 9107,
+  "total_source_products": 7312,
+  "hardware_source_records": 7554,
+  "electronics_source_records_retained_before_ambiguity_filter": 2193,
+  "electronics_products_before_history_gate": 1688,
+  "ambiguous_same_day_products_excluded": 51,
+  "electronics_products_retained": 167,
+  "daily_as_of_rows": 7760,
+  "earliest_date": "2026-06-27",
+  "latest_date": "2026-09-22",
+  "observations_per_product": {
+    "min": 22,
+    "max": 88,
+    "mean": 46.467
+  },
+  "products_at_least_30_days": 134,
+  "products_at_least_14_observations": 167,
+  "source_schema": {
+    "d": "date",
+    "c": "category slug",
+    "s": "product slug",
+    "p": "price",
+    "k": "hardware/software kind",
+    "was": "optional previous price",
+    "src": "optional underlying source URL",
+    "via": "optional capture method",
+    "nm": "optional product name"
+  },
+  "daily_derivation": "daily as-of prices derived from an openly licensed append-only price-change log by carrying each recorded price forward until the next recorded change; final changes are not extended beyond their recorded date.",
+  "product_name_note": "The `nm` name is used when present. Otherwise, the source product slug is rendered as a title-cased display name without changing its identity."
+}

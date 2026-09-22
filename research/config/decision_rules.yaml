@@ -1,0 +1,13 @@
+# This file intentionally separates protocol defaults from recovered production rules.
+# No production EMA, regression, historical-low, or BUY/WATCH/WAIT/AVOID rule exists
+# in this repository. Null values make FULL_PRICEIQ refuse to make a publication claim.
+decision_rule_version: "unrecovered-production-logic-1.0"
+ema_alpha: null
+reference_window_days: 30
+regression_window: 14
+ema_favourable_threshold: null
+ema_elevated_threshold: null
+slope_downward_threshold: null
+slope_upward_threshold: null
+historical_low_threshold: null
+target_price_condition: null

@@ -1,0 +1,6 @@
+strategy,n_decisions,mean_potential_saving,median_potential_saving,mean_regret,median_regret,decision_counts,test_rule
+BUY_NOW,2039,22.98300637567435,0.0,22.98300637567435,0.0,{'BUY': 2039},timestamp strictly after 2026-08-15
+30_DAY_AVERAGE,2039,22.98300637567435,0.0,15.58067189798921,0.0,"{'BUY': 1580, 'WAIT': 459}",timestamp strictly after 2026-08-15
+EMA_ONLY,2039,22.98300637567435,0.0,,,{'UNAVAILABLE': 2039},timestamp strictly after 2026-08-15
+14_OBSERVATION_SLOPE_ONLY,2039,22.98300637567435,0.0,35.45221186856302,0.0,"{'WAIT': 536, 'BUY': 1503}",timestamp strictly after 2026-08-15
+FULL_PRICEIQ,2039,22.98300637567435,0.0,,,{'UNAVAILABLE': 2039},timestamp strictly after 2026-08-15
