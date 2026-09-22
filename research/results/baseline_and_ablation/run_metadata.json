@@ -1,0 +1,20 @@
+{
+  "code_version_commit": null,
+  "configuration_hash": null,
+  "dataset_filename": "historical_prices.csv",
+  "dataset_hash": "f7bc3cbb6afae0c44854a877bfe16235ef63fd2cfd18cdd99a2a278a95df4004",
+  "date_range": [
+    "2026-06-27T00:00:00",
+    "2026-09-22T00:00:00"
+  ],
+  "decision_rule_version": "unrecovered-production-logic-1.0",
+  "dependency_versions": {
+    "external_runtime_dependencies": "none (Python standard library)",
+    "research": "0.1.0"
+  },
+  "evaluation_horizon_days": 7,
+  "execution_timestamp": "2026-09-22T12:54:51.326518+00:00",
+  "product_count": 167,
+  "python_version": "3.14.7",
+  "row_count": 7760
+}
